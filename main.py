@@ -1,4 +1,5 @@
 import networkx as nx
+from networkx.drawing.nx_pydot import write_dot
 from pygit2 import *
 import argparse
 import os
@@ -47,8 +48,12 @@ if __name__ == "__main__":
     for node in graph.nodes():
       if is_ancestor(repo, node, commit):
         print("-- %s is an ancestor of %s" % (commit.id, node.id))
+        graph.add_edge(commit, node)
 
     graph.add_node(commit)
+
+  for (f, t) in graph.edges():
+    print("edge from %s to %s" % (f.message.rstrip(), t.message.rstrip()))
 
 # vi: set ts=2 sw=2 expandtab
 
