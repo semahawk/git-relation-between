@@ -58,5 +58,8 @@ if __name__ == "__main__":
   for (f, t) in graph.edges():
     print("edge from %s to %s" % (f.message.rstrip(), t.message.rstrip()))
 
+  for n in graph.nodes():
+    print("node %s" % (n.message.rstrip()))
+
 # vi: set ts=2 sw=2 expandtab
 
