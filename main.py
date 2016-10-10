@@ -49,6 +49,9 @@ if __name__ == "__main__":
       if is_ancestor(repo, node, commit):
         print("-- %s is an ancestor of %s" % (commit.id, node.id))
         graph.add_edge(commit, node)
+      elif is_ancestor(repo, commit, node):
+        print("-- %s is an ancestor of %s" % (node.id, commit.id))
+        graph.add_edge(node, commit)
 
     graph.add_node(commit)
 
