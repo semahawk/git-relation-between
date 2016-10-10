@@ -17,6 +17,15 @@ def is_ancestor(repo, potential_parent, potential_child):
 
   return reachable
 
+# Check whether two commits have a common parent (but are divergent)
+def have_common_parent(repo, commit1, commit2):
+  merge_base = repo.merge_base(commit1.id, commit2.id)
+
+  return merge_base != None and merge_base != commit1.id and merge_base != commit2.id
+
+def common_parent(repo, commit1, commit2):
+  return repo.get(repo.merge_base(commit1.id, commit2.id))
+
 if __name__ == "__main__":
   parser = argparse.ArgumentParser()
   parser.add_argument('-p', dest='path', action='store', default=".")
@@ -52,6 +61,9 @@ if __name__ == "__main__":
       elif is_ancestor(repo, commit, node):
         print("-- %s is an ancestor of %s" % (node.id, commit.id))
         graph.add_edge(node, commit)
+      elif have_common_parent(repo, commit, node):
+        graph.add_edge(common_parent(repo, commit, node), commit)
+        graph.add_edge(common_parent(repo, commit, node), node)
 
     graph.add_node(commit)
 
