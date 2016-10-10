@@ -51,20 +51,24 @@ if __name__ == "__main__":
       sys.exit(1)
 
   for commit in args.commits:
+    arg = commit
     commit = repo.revparse_single(commit)
-    print("inspecting '%s' (%s)" % (commit.message.rstrip(), commit.id))
+    print("inspecting argument %s (%s)" % (arg, str(commit.id)[:7]))
 
     already_present = False
     for node in graph.nodes():
       if is_ancestor(repo, node, commit):
-        print("-- %s is an ancestor of %s" % (commit.id, node.id))
+        print("- %s is an ancestor of %s" % (str(commit.id)[:7], str(node.id)[:7]))
         graph.add_edge(commit, node)
       elif is_ancestor(repo, commit, node):
-        print("-- %s is an ancestor of %s" % (node.id, commit.id))
+        print("- %s is an ancestor of %s" % (str(node.id)[:7], str(commit.id)[:7]))
         graph.add_edge(node, commit)
       elif have_common_parent(repo, commit, node):
-        graph.add_edge(common_parent(repo, commit, node), commit)
-        graph.add_edge(common_parent(repo, commit, node), node)
+        common_parent = common_parent(repo, commit, node)
+        print("- %s and %s have a common parent in %s" %
+            (str(commit.id)[:7], str(node.id)[:7], str(common_parent.id)[:7]))
+        graph.add_edge(common_parent, commit)
+        graph.add_edge(common_parent, node)
 
       if node.id == commit.id:
         already_present = True
@@ -72,11 +76,15 @@ if __name__ == "__main__":
     if already_present == False:
       graph.add_node(commit)
 
+  print()
+  print("edges:")
   for (f, t) in graph.edges():
-    print("edge from %s to %s" % (f.message.rstrip(), t.message.rstrip()))
+    print("# %s -> %s" % (str(f.id)[:7], str(t.id)[:7]))
 
+  print()
+  print("nodes:")
   for n in graph.nodes():
-    print("node %s" % (n.message.rstrip()))
+    print("* %s %s" % (str(n.id)[:7], n.message.rstrip()))
 
 # vi: set ts=2 sw=2 expandtab
 
