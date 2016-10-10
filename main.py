@@ -54,6 +54,7 @@ if __name__ == "__main__":
     commit = repo.revparse_single(commit)
     print("inspecting '%s' (%s)" % (commit.message.rstrip(), commit.id))
 
+    already_present = False
     for node in graph.nodes():
       if is_ancestor(repo, node, commit):
         print("-- %s is an ancestor of %s" % (commit.id, node.id))
@@ -65,7 +66,11 @@ if __name__ == "__main__":
         graph.add_edge(common_parent(repo, commit, node), commit)
         graph.add_edge(common_parent(repo, commit, node), node)
 
-    graph.add_node(commit)
+      if node.id == commit.id:
+        already_present = True
+
+    if already_present == False:
+      graph.add_node(commit)
 
   for (f, t) in graph.edges():
     print("edge from %s to %s" % (f.message.rstrip(), t.message.rstrip()))
