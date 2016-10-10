@@ -11,7 +11,7 @@ def is_ancestor(repo, potential_parent, potential_child):
   reachable = False
 
   for commit in repo.walk(potential_parent.id, GIT_SORT_TOPOLOGICAL):
-    if commit.id == potential_child.id:
+    if commit.id == potential_child.id and commit.id != potential_parent.id:
       reachable = True
       break
 
