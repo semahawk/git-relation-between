@@ -4,6 +4,18 @@ import argparse
 import os
 import sys
 
+# Check whether you can get to <potential_child> by traversing the
+# history starting from <potential_parent>
+def is_ancestor(repo, potential_parent, potential_child):
+  reachable = False
+
+  for commit in repo.walk(potential_parent.id, GIT_SORT_TOPOLOGICAL):
+    if commit.id == potential_child.id:
+      reachable = True
+      break
+
+  return reachable
+
 if __name__ == "__main__":
   parser = argparse.ArgumentParser()
   parser.add_argument('-p', dest='path', action='store', default=".")
@@ -15,7 +27,6 @@ if __name__ == "__main__":
   path = os.path.realpath(args.path)
 
   try:
-    print("using repository in %s" % (path))
     repo = Repository(path + "/.git")
   except KeyError:
     print("Couldn't find a git repository in %s" % (path))
@@ -30,8 +41,14 @@ if __name__ == "__main__":
       sys.exit(1)
 
   for commit in args.commits:
+    commit = repo.revparse_single(commit)
+    print("inspecting '%s' (%s)" % (commit.message.rstrip(), commit.id))
+
+    for node in graph.nodes():
+      if is_ancestor(repo, node, commit):
+        print("-- %s is an ancestor of %s" % (commit.id, node.id))
+
     graph.add_node(commit)
 
-  print(graph.graph)
-
 # vi: set ts=2 sw=2 expandtab
+
