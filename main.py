@@ -26,6 +26,22 @@ def have_common_parent(repo, commit1, commit2):
 def common_parent(repo, commit1, commit2):
   return repo.get(repo.merge_base(commit1.id, commit2.id))
 
+def nodes_with_no_parents(graph):
+  result = []
+
+  for node in graph.nodes():
+    found = True
+
+    for (frm, to) in graph.edges():
+      if frm == node:
+        found = False
+        break
+
+    if found:
+      result.append(node)
+
+  return result
+
 if __name__ == "__main__":
   parser = argparse.ArgumentParser()
   parser.add_argument('-p', dest='path', action='store', default=".")
@@ -84,6 +100,11 @@ if __name__ == "__main__":
   print()
   print("nodes:")
   for n in graph.nodes():
+    print("* %s %s" % (str(n.id)[:7], n.message.rstrip()))
+
+  print()
+  print("nodes with no parents:")
+  for n in nodes_with_no_parents(graph):
     print("* %s %s" % (str(n.id)[:7], n.message.rstrip()))
 
 # vi: set ts=2 sw=2 expandtab
