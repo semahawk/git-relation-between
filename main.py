@@ -93,7 +93,7 @@ if __name__ == "__main__":
     print("  node_%s [label=\"%s\\n%s\"];" % (str(n.id)[:7], str(n.id)[:7], n.message.rstrip().split("\n")[0]))
 
   for (f, t) in graph.edges():
-    print("  node_%s -> node_%s;" % (str(f.id)[:7], str(t.id)[:7]))
+    print("  node_%s -> node_%s;" % (str(t.id)[:7], str(f.id)[:7]))
 
   print("}")
 
