@@ -107,7 +107,10 @@ if __name__ == "__main__":
   print("digraph G {")
 
   for n in graph.nodes():
-    print("  node_%s [label=\"%s (%s)\\n%s\"];" % (str(n.id)[:7], str(n.id)[:7], graph.node[n]['name_given_from_cli'], n.message.rstrip().split("\n")[0]))
+    if 'name_given_from_cli' in graph.node[n]:
+      print("  node_%s [label=\"%s (%s)\\n%s\"];" % (str(n.id)[:7], str(n.id)[:7], graph.node[n]['name_given_from_cli'], n.message.rstrip().split("\n")[0]))
+    else:
+      print("  node_%s [label=\"%s\\n%s\"];" % (str(n.id)[:7], str(n.id)[:7], n.message.rstrip().split("\n")[0]))
 
   for (f, t) in graph.edges():
     # check if the commit 't' (to) going to 'from' (from) is it's direct parent
