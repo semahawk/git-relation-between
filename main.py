@@ -103,7 +103,17 @@ if __name__ == "__main__":
     print("  node_%s [label=\"%s\\n%s\"];" % (str(n.id)[:7], str(n.id)[:7], n.message.rstrip().split("\n")[0]))
 
   for (f, t) in graph.edges():
-    print("  node_%s -> node_%s;" % (str(t.id)[:7], str(f.id)[:7]))
+    # check if the commit 't' (to) going to 'from' (from) is it's direct parent
+    # if so then draw a direct connection between them
+    if is_direct_parent(repo, f, t):
+      print("  node_%s -> node_%s;" % (str(t.id)[:7], str(f.id)[:7]))
+    # if they are not directly related (ie. there's some commits in between
+    # them (but one is still an ancestor of the other)) then create an
+    # 'intermediate' node which symbolizes the commits in between them
+    else:
+      print("  node_intermediate_%s_%s [label=\"...\",style=dotted];" % (t.id, f.id))
+      print("  node_%s -> node_intermediate_%s_%s;" % (str(t.id)[:7], t.id, f.id))
+      print("  node_intermediate_%s_%s -> node_%s;" % (t.id, f.id, str(f.id)[:7]))
 
   print("}")
 
