@@ -45,7 +45,7 @@ def have_common_parent(repo, commit1, commit2):
 
   return merge_base != None and merge_base != commit1.id and merge_base != commit2.id
 
-def common_parent(repo, commit1, commit2):
+def get_common_parent(repo, commit1, commit2):
   return repo.get(repo.merge_base(commit1.id, commit2.id))
 
 def find_all_paths(graph, start, end, path=[]):
@@ -101,7 +101,7 @@ if __name__ == "__main__":
       elif is_ancestor(repo, commit, node):
         graph.add_edge(node, commit)
       elif have_common_parent(repo, commit, node):
-        common_parent = common_parent(repo, commit, node)
+        common_parent = get_common_parent(repo, commit, node)
         graph.add_edge(common_parent, commit)
         graph.add_edge(common_parent, node)
 
