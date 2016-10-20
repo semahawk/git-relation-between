@@ -87,5 +87,15 @@ if __name__ == "__main__":
     if already_present == False:
       graph.add_node(commit)
 
-# vi: set ts=2 sw=2 expandtab
+  print("digraph G {")
+
+  for n in graph.nodes():
+    print("  node_%s [label=\"%s\\n%s\"];" % (str(n.id)[:7], str(n.id)[:7], n.message.rstrip().split("\n")[0]))
+
+  for (f, t) in graph.edges():
+    print("  node_%s -> node_%s;" % (str(f.id)[:7], str(t.id)[:7]))
+
+  print("}")
+
+# vi: set ts=2:sw=2:expandtab
 
