@@ -103,6 +103,8 @@ if __name__ == "__main__":
   for (f, t) in graph.edges():
     # check if the commit 't' (to) going to 'from' (from) is it's direct parent
     # if so then draw a direct connection between them
+    # we're going the opposite way (to -> from) so that the children nodes are
+    # on top (visually) - like eg. in git's usual log
     if is_direct_parent(repo, f, t):
       print("  node_%s -> node_%s;" % (t.id, f.id))
     # if they are not directly related (ie. there's some commits in between
