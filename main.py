@@ -59,7 +59,6 @@ if __name__ == "__main__":
   args = parser.parse_args()
   graph = nx.DiGraph()
 
-  # path = os.readlink(args.path)
   path = os.path.realpath(args.path)
 
   try:
