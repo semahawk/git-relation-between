@@ -17,6 +17,16 @@ def is_ancestor(repo, potential_parent, potential_child):
 
   return reachable
 
+def is_direct_parent(repo, potential_direct_parent, child):
+  if child.parents:
+    actual_direct_parent = child.parents[0];
+    if potential_direct_parent.id == actual_direct_parent.id:
+      return True
+    else:
+      return False
+  else:
+    return False
+
 # Check whether two commits have a common parent (but are divergent)
 def have_common_parent(repo, commit1, commit2):
   merge_base = repo.merge_base(commit1.id, commit2.id)
