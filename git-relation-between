@@ -48,6 +48,25 @@ def have_common_parent(repo, commit1, commit2):
 def common_parent(repo, commit1, commit2):
   return repo.get(repo.merge_base(commit1.id, commit2.id))
 
+def find_all_paths(graph, start, end, path=[]):
+  path = path + [start]
+
+  if start == end:
+    return [path]
+
+  if not start in graph:
+    return []
+
+  paths = []
+
+  for node in graph[start]:
+    if node not in path:
+      newpaths = find_all_paths(graph, node, end, path)
+      for newpath in newpaths:
+        paths.append(newpath)
+
+  return paths
+
 if __name__ == "__main__":
   parser = argparse.ArgumentParser()
   parser.add_argument('-p', dest='path', action='store', default=".")
