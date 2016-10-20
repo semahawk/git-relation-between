@@ -1,3 +1,11 @@
+#! /usr/bin/env python
+# -*- coding: utf-8 -*-
+# vim:fenc=utf-8
+#
+# Copyright © 2016 Szymon Urbaś <szymon.urbas@aol.com>
+#
+# Distributed under terms of the BSD (2-clause) license.
+
 import networkx as nx
 from networkx.drawing.nx_pydot import write_dot
 from pygit2 import *
