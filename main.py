@@ -69,20 +69,15 @@ if __name__ == "__main__":
   for commit in args.commits:
     arg = commit
     commit = repo.revparse_single(commit)
-    print("inspecting argument %s (%s)" % (arg, str(commit.id)[:7]))
 
     already_present = False
     for node in graph.nodes():
       if is_ancestor(repo, node, commit):
-        print("- %s is an ancestor of %s" % (str(commit.id)[:7], str(node.id)[:7]))
         graph.add_edge(commit, node)
       elif is_ancestor(repo, commit, node):
-        print("- %s is an ancestor of %s" % (str(node.id)[:7], str(commit.id)[:7]))
         graph.add_edge(node, commit)
       elif have_common_parent(repo, commit, node):
         common_parent = common_parent(repo, commit, node)
-        print("- %s and %s have a common parent in %s" %
-            (str(commit.id)[:7], str(node.id)[:7], str(common_parent.id)[:7]))
         graph.add_edge(common_parent, commit)
         graph.add_edge(common_parent, node)
 
@@ -91,21 +86,6 @@ if __name__ == "__main__":
 
     if already_present == False:
       graph.add_node(commit)
-
-  print()
-  print("edges:")
-  for (f, t) in graph.edges():
-    print("# %s -> %s" % (str(f.id)[:7], str(t.id)[:7]))
-
-  print()
-  print("nodes:")
-  for n in graph.nodes():
-    print("* %s %s" % (str(n.id)[:7], n.message.rstrip()))
-
-  print()
-  print("nodes with no parents:")
-  for n in nodes_with_no_parents(graph):
-    print("* %s %s" % (str(n.id)[:7], n.message.rstrip()))
 
 # vi: set ts=2 sw=2 expandtab
 
